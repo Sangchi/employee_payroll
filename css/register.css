@@ -1,0 +1,206 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    height: 100vh;
+    width: 100wh;
+}
+
+header {
+    display: flex;
+    justify-content: flex-start;
+    background-color: #ffffff;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 25px;
+
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    color: transparent;
+    border: none;
+}
+
+.primary-text {
+    font-weight: bold;
+    font-size: 18px;
+    color: #82a70c;
+    border: none;
+}
+
+.secondary-text {
+    font-weight: bold;
+    font-size: 18px;
+    color: #42515f;
+    background-color: rgb(255, 255, 255);
+    border: none;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-direction: row;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 20px;
+    flex-wrap: wrap;
+
+}
+
+form {
+    background-color: #ffffff;
+    padding: 20px 112px;
+    border-radius: 10px ;
+    width: 950px;
+    height: 750px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+  
+}
+
+.form-header {
+    text-align: start;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 25px;
+    margin-top: 30px;
+    align-items: center;
+    gap:30px;
+    flex-wrap: wrap;
+    
+}
+
+label {
+    display: flex;
+    font-weight:lighter;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 600px;
+    height: 50px;
+    padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 50px;
+}
+
+#male{
+    margin-left: 42px;
+
+}
+
+#hr{
+    margin-left: 13px;
+}
+
+#notes{
+    height: 100px;
+}
+
+#salary{
+
+    width:341px;
+
+}
+
+#day{
+    margin-left:20px;
+}
+
+
+.profile-images {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-images img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 20px;
+    margin-right: 45px;
+}
+
+.date-select select {
+    width: 120px;
+    height: 40px;
+    padding: 8px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 50px;
+    width: 130px;
+}
+
+button.cancel {
+    background-color: #ccc;
+}
+
+button.submit {
+    background-color: #ccc;
+    margin-left:290px
+    
+}
+
+button.reset {
+    
+    background-color: #ccc;
+
+}
+
+#img1,#img2,#img3,#img4{
+    cursor: pointer;
+}
+
+#male,#female{
+    cursor: pointer;
+}
+
+#hr,#sales,#finance,#engineering,#others{
+    cursor: pointer;
+}
+
+
+
