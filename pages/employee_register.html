@@ -9,7 +9,9 @@
 <body>
     <header>
         <div class="logo-container">
+           <a href="employee_dashboard.html",class="dashboard">
             <img src="../assets/logo.png" alt="Employee Payroll Logo" class="logo">
+        </a>
             <div class="text-container">
                 <span class="primary-text">EMPLOYEE</span>
                 <span class="secondary-text">PAYROLL</span>
@@ -58,17 +60,22 @@
 
             <div class="form-group" id="departments-container">
                 <label>Department</label>
-                <input type="checkbox" id="hr" name="department" value="HR" class="checkbox">
-                <label for="hr">HR</label>
+                <input type="checkbox" id="HR" name="department" value="HR" class="checkbox">
+                <label for="HR">HR</label> <!-- Updated for attribute to match the id -->
+                
                 <input type="checkbox" id="sales" name="department" value="Sales" class="checkbox">
                 <label for="sales">Sales</label>
+                
                 <input type="checkbox" id="finance" name="department" value="Finance" class="checkbox">
                 <label for="finance">Finance</label>
-                <input type="checkbox" id="engineering" name="department" value="Engineer" class="checkbox">
-                <label for="engineering">Engineer</label>
+                
+                <input type="checkbox" id="engineering" name="department" value="Engineering" class="checkbox"> <!-- Updated value -->
+                <label for="engineering">Engineering</label> <!-- Corrected label for -->
+                
                 <input type="checkbox" id="others" name="department" value="Others" class="checkbox">
                 <label for="others">Others</label>
             </div>
+            
 
             <div class="form-group">
                 <label for="salary">Salary</label>
