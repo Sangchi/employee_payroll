@@ -1,4 +1,3 @@
-// References to form elements
 const nameRef = document.getElementById("name");
 const nameErrorRef = document.getElementById("nameError");
 const profileRef = document.getElementsByName("profile");
@@ -9,20 +8,92 @@ const dayRef = document.getElementById("day");
 const monthRef = document.getElementById("month");
 const yearRef = document.getElementById("year");
 const notesRef = document.getElementById("notes");
-const submitBtnRef = document.getElementsByClassName("submit")[0];
-const cancelBtnRef = document.getElementsByClassName("cancel")[0];
-const resetBtnRef = document.getElementsByClassName("reset")[0];
+const submitBtnRef = document.querySelector(".submit");
+const cancelBtnRef = document.querySelector(".cancel");
+const resetBtnRef = document.querySelector(".reset");
 const formRef = document.getElementById("emp-form");
 
-// Name validation pattern
-const namePattern = /^[a-zA-Z\s']{3,}$/;
+const apiUrl = 'http://localhost:3000/employees';
 
-// Validation function for name
+// Load employee data for editing
+document.addEventListener('DOMContentLoaded', (event) => {
+    const editId = new URLSearchParams(window.location.search).get('editId'); // Get the employee ID from URL
+
+    if (editId !== null) {
+        loadEmployeeDataForEdit(editId);
+    }
+});
+
+function loadEmployeeDataForEdit(id) {
+    fetch(`${apiUrl}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Employee not found.');
+                }
+                throw new Error('Failed to load employee data.');
+            }
+            return response.json();
+        })
+        .then(employee => {
+            // Set the name value 
+            nameRef.value = employee.name;
+
+            // Set the profile radio button
+            const profileElement = document.querySelector(`input[value="${employee.profile}"]`);
+            if (profileElement) {
+                profileElement.checked = true;
+            } else {
+                console.error(`Profile option for value "${employee.profile}" not found.`);
+            }
+
+            // Set the gender radio button
+            const genderElement = document.getElementById(employee.gender);
+            if (genderElement) {
+                genderElement.checked = true;
+            } else {
+                console.error(`Gender option for value "${employee.gender}" not found.`);
+            }
+
+            employee.departments.forEach(department => {
+                const departmentElement = document.getElementById(department);
+                if (departmentElement) {
+                    departmentElement.checked = true; // Check the checkbox if found
+                } else {
+                    console.error(`Department checkbox for "${department}" not found.`);
+                }
+            });
+            
+
+            // Set salary value
+            salaryRef.value = employee.salary;
+
+            // Set start date
+            const [day, month, year] = employee.startDate.split('-');
+            if (dayRef && monthRef && yearRef) {
+                dayRef.value = day;
+                monthRef.value = month;
+                yearRef.value = year;
+            } else {
+                console.error('One or more date fields (day, month, year) are missing.');
+            }
+
+            // Set notes value
+            notesRef.value = employee.notes;
+        })
+        .catch(error => {
+            console.error('Error loading employee data:', error);
+            alert(error.message);  // Show an alert with the error message
+        });
+}
+
+
+// Validate form fields
 function validateName(name) {
+    const namePattern = /^[a-zA-Z\s']{3,}$/;
     if (!namePattern.test(name)) {
         nameErrorRef.style.display = "block";
-        nameErrorRef.textContent = "Name must be at least 3 characters long and contain only letters, spaces";
-        nameErrorRef.style.color = "red";
+        nameErrorRef.textContent = "Name must be at least 3 characters long and contain only letters and spaces.";
         return false;
     } else {
         nameErrorRef.style.display = "none";
@@ -30,7 +101,6 @@ function validateName(name) {
     }
 }
 
-// Validate other fields
 function validateProfile() {
     for (let element of profileRef) {
         if (element.checked) {
@@ -83,12 +153,12 @@ function clearForm() {
     nameErrorRef.style.display = "none";
 }
 
-
+// Submit button functionality
 submitBtnRef.addEventListener("click", (e) => {
     e.preventDefault();
 
     const nameVal = nameRef.value.trim();
-    const editEmpIndex = localStorage.getItem('editEmpIndex');
+    const editId = new URLSearchParams(window.location.search).get('editId');
 
     if (!validateName(nameVal) || !validateProfile() || !validateGender() || !validateDepartments() || !validateSalary() || !validateDate()) {
         return;
@@ -119,7 +189,6 @@ submitBtnRef.addEventListener("click", (e) => {
     const selectedStartDate = `${dayRef.value}-${monthRef.value}-${yearRef.value}`;
     const notesVal = notesRef.value;
 
-    // Create employee object
     const empDataObj = {
         name: nameVal,
         profile: selectedProfile,
@@ -130,60 +199,49 @@ submitBtnRef.addEventListener("click", (e) => {
         notes: notesVal,
     };
 
-    let empRecordList = JSON.parse(localStorage.getItem("empDataList")) || [];
-
-    if (editEmpIndex !== null) {
-        empRecordList[editEmpIndex] = empDataObj;
-        localStorage.removeItem('editEmpIndex');
+    if (editId !== null) {
+        // Update existing employee
+        fetch(`${apiUrl}/${editId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(empDataObj)
+        })
+        .then(() => {
+            alert('Employee updated successfully');
+            localStorage.removeItem('editId');
+            window.location.href = 'employee_dashboard.html';
+        })
+        .catch(error => console.error('Error updating employee:', error));
     } else {
-        empRecordList.push(empDataObj);
+        // Add new employee
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(empDataObj)
+        })
+        .then(() => {
+            alert('Employee added successfully');
+            window.location.href = 'employee_dashboard.html';
+        })
+        .catch(error => console.error('Error adding employee:', error));
     }
 
-    localStorage.setItem('empDataList', JSON.stringify(empRecordList));
-
-    
-
     clearForm();
-    window.location.href = '../pages/employee_dashboard.html';  
 });
 
+// Cancel button functionality
 cancelBtnRef.addEventListener("click", (e) => {
     e.preventDefault();
     clearForm();
-    localStorage.removeItem('editEmpIndex');
-    window.location.href = '../pages/employee_dashboard.html';
+    window.location.href = 'employee_dashboard.html'; // Redirect to dashboard
 });
 
+// Reset button functionality
 resetBtnRef.addEventListener("click", (e) => {
     e.preventDefault();
     clearForm();
 });
-
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    const editEmpIndex = localStorage.getItem('editEmpIndex');
-    if (editEmpIndex !== null) {
-        loadEmployeeDataForEdit(editEmpIndex);
-    }
-});
-
-function loadEmployeeDataForEdit(index) {
-    const empDataList = JSON.parse(localStorage.getItem('empDataList')) || [];
-    const employee = empDataList[index];
-
-    if (employee) {
-        document.getElementById('name').value = employee.name;
-        document.querySelector(`input[value="${employee.profile}"]`).checked = true;
-        document.getElementById(employee.gender).checked = true;
-        employee.departments.forEach(department => {
-            document.getElementById(department).checked = true;
-        });
-        document.getElementById('salary').value = employee.salary;
-        const [day, month, year] = employee.startDate.split('-');
-        document.getElementById('day').value = day;
-        document.getElementById('month').value = month;
-        document.getElementById('year').value = year;
-
-       
-    }
-}
