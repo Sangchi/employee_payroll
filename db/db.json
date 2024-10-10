@@ -1,16 +1,18 @@
 {
   "employees": [
     {
-      "id": "ad7a",
       "name": "Prashant Ganesh Chavan",
       "profile": "../assets/profile1.png",
       "gender": "male",
       "departments": [
-        "HR"
+        "HR",
+        "Sales",
+        "Finance"
       ],
       "salary": "60000",
       "startDate": "1-Feb-2024",
-      "notes": "new employee joined "
+      "notes": "new employee joined ",
+      "id": "ad7a"
     },
     {
       "id": "c98d",
@@ -27,7 +29,6 @@
       "notes": "new employee joined "
     },
     {
-      "id": "ee64",
       "name": "Prashant Ganesh Chavan",
       "profile": "../assets/profile1.png",
       "gender": "female",
@@ -36,21 +37,80 @@
         "Sales",
         "Finance"
       ],
-      "salary": "60000",
+      "salary": "50000",
       "startDate": "3-Jan-2024",
+      "notes": "new employee joined ",
+      "id": "ee64"
+    },
+    {
+      "id": "d032",
+      "name": "Prashant Ganesh Chavan ",
+      "profile": "../assets/profile2.png",
+      "gender": "male",
+      "departments": [
+        "HR",
+        "Sales",
+        "Finance"
+      ],
+      "salary": "60000",
+      "startDate": "2-April-2022",
       "notes": "new employee joined "
     },
     {
-      "name": "Prashant Ganesh Chavan",
+      "id": "9068",
+      "name": "Prashant Ganesh Chavan ",
+      "profile": "../assets/profile2.png",
+      "gender": "male",
+      "departments": [
+        "HR",
+        "Sales",
+        "Finance"
+      ],
+      "salary": "70000",
+      "startDate": "2-Feb-2021",
+      "notes": "new employee joined "
+    },
+    {
+      "name": "Prashant Ganesh Chavan ",
+      "profile": "../assets/profile2.png",
+      "gender": "male",
+      "departments": [
+        "HR",
+        "Sales",
+        "Finance"
+      ],
+      "salary": "60000",
+      "startDate": "3-March-2023",
+      "notes": "new employee joined ",
+      "id": "5a09"
+    },
+    {
+      "name": "Prashant Ganesh Chavan ",
       "profile": "../assets/profile4.png",
       "gender": "male",
       "departments": [
-        "HR"
+        "HR",
+        "Sales",
+        "Finance"
+      ],
+      "salary": "70000",
+      "startDate": "3-Feb-2022",
+      "notes": "new employee joined ",
+      "id": "2469"
+    },
+    {
+      "id": "826d",
+      "name": "keshav wanjale",
+      "profile": "../assets/profile4.png",
+      "gender": "male",
+      "departments": [
+        "HR",
+        "Sales",
+        "Finance"
       ],
       "salary": "60000",
-      "startDate": "3-April-2024",
-      "notes": "new employee joined ",
-      "id": "2f2f"
+      "startDate": "2-March-2021",
+      "notes": "new employee joined "
     }
   ]
 }
