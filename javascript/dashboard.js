@@ -1,124 +1,110 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    displayEmployeeData();
-});
+$(document).ready(function () {
+    const apiUrl = 'http://localhost:3000/employees'; // Your JSON server endpoint
 
-const apiUrl = 'http://localhost:3000/employees'; // Your JSON server endpoint
+    // Function to load employee data
+    function loadEmployeeData() {
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function (empDataList) {
+                const employeeTableBody = $('#display tbody');
+                employeeTableBody.empty(); // Clear existing rows
 
-// Function to fetch and display employee data
-function displayEmployeeData() {
-    const employeeTableBody = document.querySelector('#display tbody'); 
+                if (empDataList.length === 0) {
+                    employeeTableBody.append('<tr><td colspan="7">No Employee Data Found</td></tr>');
+                    return;
+                }
 
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(empDataList => {
-            employeeTableBody.innerHTML = '';
-
-            if (empDataList.length === 0) {
-                const emptyRow = document.createElement('tr');
-                emptyRow.innerHTML = '<td colspan="7">No Employee Data Found</td>';
-                employeeTableBody.appendChild(emptyRow);
-                return;
-            }
-
-            empDataList.forEach((employee, index) => { // Using index as ID
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><img src="${employee.profile}" style="width: 50px; height: 50px; border-radius: 50%;"></td>
-                    <td>${employee.name}</td>
-                    <td>${employee.gender}</td>
-                    <td>${employee.departments.join(', ')}</td>
-                    <td>${employee.salary}</td>
-                    <td>${employee.startDate}</td>
-                    <td>
-                        <button onclick="deleteEmployee(${index}, this)" class="delete"><img src="../assets/delete_icon.png" alt="Delete" /></button>
-                        <button onclick="editEmployee(${index})" class="edit"><img src="../assets/edit_icon.png" alt="Edit" /></button>
-                    </td>
-                `;
-                
-                employeeTableBody.appendChild(row);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching employee data:', error);
-            alert('Could not fetch employee data. Please try again later.');
-        });
-}
-
-// Function to delete employee
-function deleteEmployee(index, button) {
-    if (confirm("Are you sure you want to delete this employee?")) {
-        // Fetch the current employee list from the JSON server
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(empDataList => {
-                // Find the employee ID based on the index
-                const employeeId = empDataList[index].id; // Assuming each employee object has an `id` property
-
-                // Send DELETE request to the JSON server
-                fetch(`${apiUrl}/${employeeId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Remove the employee row from the UI
-                        const row = button.closest('tr');
-                        row.remove(); // Remove the row from the UI
-
-                        // Update localStorage by removing the employee from the local list
-                        const updatedList = empDataList.filter((_, i) => i !== index);
-                        localStorage.setItem('empDataList', JSON.stringify(updatedList));
-                    } else {
-                        console.error('Failed to delete employee:', response.status);
-                        alert('Could not delete employee. Please try again later.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting employee from server:', error);
-                    alert('Could not delete employee. Please try again later.');
+                empDataList.forEach((employee, index) => {
+                    const row = `
+                        <tr>
+                            <td><img src="${employee.profile}" style="width: 50px; height: 50px; border-radius: 50%;"></td>
+                            <td>${employee.name}</td>
+                            <td>${employee.gender}</td>
+                            <td>${employee.departments.map(department => `<span class="department-label">${department}</span>`).join('')}</td>
+                            <td>${employee.salary}</td>
+                            <td>${employee.startDate}</td>
+                            <td>
+                                <button onclick="deleteEmployee(${index}, this)" class="delete">
+                                    <img src="../assets/delete_icon.png" alt="Delete" />
+                                </button>
+                                <button onclick="editEmployee(${index})" class="edit">
+                                    <img src="../assets/edit_icon.png" alt="Edit" />
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    employeeTableBody.append(row);
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching employee data for deletion:', error);
-                alert('Could not fetch employee data for deletion. Please try again later.');
-            });
-    }
-}
-
-
-function editEmployee(index) {
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(empDataList => {
-            const employeeId = empDataList[index].id;  // Get the unique id of the employee
-
-            // Store the employee ID in the URL for the form page
-            localStorage.setItem('editId', employeeId);
-
-            // Redirect to the form page
-            window.location.href = `employee_register.html?editId=${employeeId}`;
+            },
+            error: function () {
+                alert('Error loading employee data.');
+            }
         });
-}
+    }
 
-// Search functionality
-document.getElementById('search-button').addEventListener('click', function () {
-    const searchInput = document.getElementById('search-input').value.toLowerCase();
-    const tableRows = document.querySelectorAll('#display tbody tr'); 
+    // Function to delete an employee
+    window.deleteEmployee = function (index, button) {
+        if (confirm("Are you sure you want to delete this employee?")) {
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                success: function (empDataList) {
+                    const employeeId = empDataList[index].id; // Get employee ID by index
 
-    tableRows.forEach(row => {
-        const nameCell = row.getElementsByTagName('td')[1]; // Name column
-        const genderCell = row.getElementsByTagName('td')[2]; // Gender column
-        const departmentCell = row.getElementsByTagName('td')[3]; // Department column
+                    $.ajax({
+                        url: `${apiUrl}/${employeeId}`,
+                        type: 'DELETE',
+                        success: function () {
+                            alert('Employee deleted successfully.');
+                            loadEmployeeData(); // Reload the table after deletion
+                        },
+                        error: function () {
+                            alert('Error deleting employee. Please try again.');
+                        }
+                    });
+                },
+                error: function () {
+                    alert('Error fetching employee data for deletion.');
+                }
+            });
+        }
+    };
 
-        if (nameCell) {
-            const nameText = nameCell.textContent.toLowerCase();
-            const genderText = genderCell.textContent.toLowerCase();
-            const departmentText = departmentCell.textContent.toLowerCase();
+    // Function to edit an employee (redirect to the edit form)
+    window.editEmployee = function (index) {
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function (empDataList) {
+                const employeeId = empDataList[index].id; // Get employee ID by index
+                localStorage.setItem('editId', employeeId); // Store ID in localStorage
+                window.location.href = `employee_register.html?editId=${employeeId}`; // Redirect to the edit form
+            },
+            error: function () {
+                alert('Error fetching employee data for editing.');
+            }
+        });
+    };
+
+    // Search functionality
+    $('#search-button').on('click', function () {
+        const searchInput = $('#search-input').val().toLowerCase();
+        const tableRows = $('#display tbody tr');
+
+        tableRows.each(function () {
+            const nameText = $(this).find('td:nth-child(2)').text().toLowerCase();  // Name column
+            const genderText = $(this).find('td:nth-child(3)').text().toLowerCase(); // Gender column
+            const departmentText = $(this).find('td:nth-child(4)').text().toLowerCase(); // Department column
 
             if (nameText.includes(searchInput) || genderText.includes(searchInput) || departmentText.includes(searchInput)) {
-                row.style.display = '';
+                $(this).show();
             } else {
-                row.style.display = 'none';
+                $(this).hide();
             }
-        }
+        });
     });
+
+    // Load employee data when the page is ready
+    loadEmployeeData();
 });
