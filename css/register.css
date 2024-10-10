@@ -8,13 +8,14 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f8f8f8;
     height: 100vh;
-    width: 100wh;
+    width: 100vw;
 }
 
 header {
     display: flex;
     justify-content: flex-start;
     background-color: #ffffff;
+    padding: 20px 0;
 }
 
 .logo-container {
@@ -23,8 +24,6 @@ header {
     align-items: center;
     width: 80%;
     margin: 0 auto;
-    padding-top: 25px;
-
 }
 
 .logo {
@@ -36,51 +35,41 @@ header {
 .text-container {
     display: flex;
     flex-direction: column;
-    color: transparent;
-    border: none;
 }
 
 .primary-text {
     font-weight: bold;
     font-size: 18px;
     color: #82a70c;
-    border: none;
 }
 
 .secondary-text {
     font-weight: bold;
     font-size: 18px;
     color: #42515f;
-    background-color: rgb(255, 255, 255);
-    border: none;
 }
 
 .form-container {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    flex-direction: row;
-    align-items: center;
     background-color: #f7f7f7;
     padding: 20px;
-    flex-wrap: wrap;
-
+    width: 100%;
 }
 
 form {
     background-color: #ffffff;
-    padding: 20px 112px;
-    border-radius: 10px ;
+    padding: 20px 50px;
+    border-radius: 10px;
     width: 950px;
-    height: 750px;
+    max-width: 100%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    
-  
 }
 
 .form-header {
-    text-align: start;
-    font-size: 20px;
+    text-align: left;
+    font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
 }
@@ -89,66 +78,45 @@ form {
     display: flex;
     flex-direction: row;
     margin-bottom: 25px;
-    margin-top: 30px;
     align-items: center;
-    gap:30px;
+    gap: 30px;
     flex-wrap: wrap;
-    
 }
 
 label {
-    display: flex;
-    font-weight:lighter;
+    font-weight: lighter;
     margin-bottom: 5px;
+    width: 150px;
 }
 
 input[type="text"],
 textarea,
 select {
     width: 600px;
-    height: 50px;
+    height: 40px;
     padding: 8px;
-    margin-bottom: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-left: 50px;
 }
 
-#male{
-    margin-left: 42px;
-
-}
-
-#HR{
-    margin-left: 13px;
-}
-
-#notes{
+#notes {
     height: 100px;
 }
-
-#salary{
-
-    width:341px;
-
-}
-
-#day{
-    margin-left:20px;
-}
-
 
 .profile-images {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .profile-images img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-left: 20px;
-    margin-right: 45px;
+    margin: 0 15px;
+    max-width: 100%;
+    object-fit: cover;
 }
 
 .date-select select {
@@ -179,28 +147,115 @@ button.cancel {
 }
 
 button.submit {
-    background-color: #ccc;
-    margin-left:290px
-    
+    background-color: #82a70c;
+    color: white;
 }
 
 button.reset {
-    
     background-color: #ccc;
-
 }
 
-#img1,#img2,#img3,#img4{
+#img1, #img2, #img3, #img4,
+#male, #female,
+#HR, #sales, #finance, #engineering, #others {
     cursor: pointer;
 }
 
-#male,#female{
-    cursor: pointer;
+/* Responsive Breakpoints */
+@media (max-width: 932px) {
+    form {
+        padding: 20px 20px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+        width: 100%;
+    }
+
+    .profile-images img {
+        width: 30px;
+        height: 30px;
+        margin: 0 10px;
+    }
+
+    button.submit {
+        margin-left: 0;
+    }
 }
 
-#hr,#sales,#finance,#engineering,#others{
-    cursor: pointer;
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    label {
+        width: auto;
+    }
+
+    .profile-images {
+        justify-content: flex-start;
+    }
 }
 
+/* Mobile Styles */
+@media (max-width: 576px) {
+    form {
+        width: 100%;
+        padding: 15px;
+    }
 
+    input[type="text"],
+    textarea,
+    select {
+        width: 100%;
+    }
 
+    .profile-images img {
+        width: 25px;
+        height: 25px;
+        margin: 0 10px;
+    }
+
+    .form-header {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .form-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+        height: 45px;
+    }
+}
+
+/* Small Mobile (Extra Small Devices) */
+@media (max-width: 440px) {
+    form {
+        padding: 10px;
+    }
+
+    .profile-images img {
+        width: 20px;
+        height: 20px;
+    }
+
+    button {
+        padding: 8px;
+    }
+
+    .date-select select {
+        width: 100px;
+        height: 35px;
+    }
+}
